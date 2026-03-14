@@ -1,0 +1,18 @@
+import React from 'react';
+import RoleLayout from './RoleLayout';
+
+export default function AdminLayout() {
+  return (
+    <RoleLayout
+      title="Admin Console"
+      basePath="/admin"
+      extraLinks={[
+        { label: 'Users', to: '/admin/users' },
+        { label: 'Departments', to: '/admin/departments' },
+        { label: 'Items', to: '/admin/items' },
+        { label: 'Categories', to: '/admin/categories' },
+        { label: 'Vendors', to: '/admin/vendors' },
+      ]}
+    />
+  );
+}
