@@ -8,6 +8,7 @@ enum RoleName: string
     case Manager = 'Manager';
     case Admin = 'Admin';
     case GeneralManager = 'GeneralManager';
+    case System = 'System';
     case Vendor = 'Vendor';
 
     /**

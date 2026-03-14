@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -36,6 +37,7 @@ class UserController extends Controller
             'is_active' => $data['is_active'] ?? true,
         ]);
 
+        $this->ensureRoleExists($data['role']);
         $user->syncRoles([$data['role']]);
 
         return response()->json([
@@ -67,6 +69,7 @@ class UserController extends Controller
         }
 
         $user->update($payload);
+        $this->ensureRoleExists($data['role']);
         $user->syncRoles([$data['role']]);
 
         return response()->json([
@@ -105,5 +108,10 @@ class UserController extends Controller
             'updated_at' => $user->updated_at,
             'deleted_at' => $user->deleted_at,
         ];
+    }
+
+    private function ensureRoleExists(string $role): void
+    {
+        Role::findOrCreate($role, 'web');
     }
 }

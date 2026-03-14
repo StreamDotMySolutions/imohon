@@ -4,11 +4,16 @@ import AdminUsersCreatePage from '../modules/admin/users/pages/CreatePage';
 import AdminUsersEditPage from '../modules/admin/users/pages/EditPage';
 import AdminUsersIndexPage from '../modules/admin/users/pages/IndexPage';
 import AdminUsersShowPage from '../modules/admin/users/pages/ShowPage';
+import AdminDepartmentsCreatePage from '../modules/admin/departments/pages/CreatePage';
+import AdminDepartmentsEditPage from '../modules/admin/departments/pages/EditPage';
+import AdminDepartmentsIndexPage from '../modules/admin/departments/pages/IndexPage';
+import AdminDepartmentsShowPage from '../modules/admin/departments/pages/ShowPage';
 import AdminLayout from '../shared/layouts/AdminLayout';
 import ManagerLayout from '../shared/layouts/ManagerLayout';
 import UserLayout from '../shared/layouts/UserLayout';
 import GeneralManagerLayout from '../shared/layouts/GeneralManagerLayout';
 import VendorLayout from '../shared/layouts/VendorLayout';
+import SystemLayout from '../shared/layouts/SystemLayout';
 import ComingSoonPage from '../shared/pages/ComingSoonPage';
 import LoginPage from '../shared/pages/LoginPage';
 import NotFoundPage from '../shared/pages/NotFoundPage';
@@ -50,8 +55,12 @@ export const router = createBrowserRouter([
       },
       {
         path: 'departments',
-        index: true,
-        element: <ComingSoonPage title="Departments" />,
+        children: [
+          { index: true, element: <AdminDepartmentsIndexPage /> },
+          { path: 'create', element: <AdminDepartmentsCreatePage /> },
+          { path: ':departmentId', element: <AdminDepartmentsShowPage /> },
+          { path: ':departmentId/edit', element: <AdminDepartmentsEditPage /> },
+        ],
       },
       {
         path: 'items',
@@ -118,14 +127,54 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <RoleDashboardPage title="General Manager Dashboard" /> },
       {
-        path: 'requests',
-        index: true,
-        element: <ComingSoonPage title="Requests" />,
-      },
-      {
         path: 'distributions',
         index: true,
         element: <ComingSoonPage title="Distributions" />,
+      },
+    ],
+  },
+  {
+    path: '/system',
+    element: (
+      <RequireAuth>
+        <RequireRole roles={['System']}>
+          <SystemLayout />
+        </RequireRole>
+      </RequireAuth>
+    ),
+    children: [
+      {
+        index: true,
+        element: <RoleDashboardPage title="System Dashboard" />,
+      },
+      {
+        path: 'users',
+        children: [
+          { index: true, element: <AdminUsersIndexPage /> },
+          { path: 'create', element: <AdminUsersCreatePage /> },
+          { path: ':userId', element: <AdminUsersShowPage /> },
+          { path: ':userId/edit', element: <AdminUsersEditPage /> },
+        ],
+      },
+      {
+        path: 'departments',
+        index: true,
+        element: <ComingSoonPage title="Departments" />,
+      },
+      {
+        path: 'items',
+        index: true,
+        element: <ComingSoonPage title="Items" />,
+      },
+      {
+        path: 'categories',
+        index: true,
+        element: <ComingSoonPage title="Categories" />,
+      },
+      {
+        path: 'vendors',
+        index: true,
+        element: <ComingSoonPage title="Vendors" />,
       },
     ],
   },

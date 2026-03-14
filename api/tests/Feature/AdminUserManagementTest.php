@@ -111,6 +111,27 @@ class AdminUserManagementTest extends TestCase
             ->assertJsonPath('data.department.type', DepartmentType::Vendor->value);
     }
 
+    public function test_system_role_requires_hq_department(): void
+    {
+        $department = Department::query()->create([
+            'name' => 'Operations',
+            'type' => DepartmentType::Regular,
+        ]);
+
+        $response = $this->postJson('/api/admin/users', [
+            'name' => 'System User',
+            'email' => 'system@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+            'role' => RoleName::System->value,
+            'department_id' => $department->id,
+        ]);
+
+        $response
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('department_id');
+    }
+
     public function test_updating_role_requires_valid_department_change(): void
     {
         $regularDepartment = Department::query()->create([
