@@ -1,26 +1,37 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-This repository contains the Laravel API application in `api/`. Core domain code lives in `app/`, HTTP entry points in `routes/`, configuration in `config/`, and database migrations, factories, and seeders in `database/`. Frontend build inputs are in `resources/js` and `resources/css`; compiled assets are served from `public/`. Automated tests live in `tests/Feature` and `tests/Unit`.
+This repository has two apps: `api/` for the Laravel 12 backend and `ui/` for the React + Vite frontend. In `api/`, business code lives in `app/`, routes in `routes/`, config in `config/`, and schema/seed data in `database/`. In `ui/`, role-based screens live under `src/modules`, shared layouts and helpers under `src/shared`, and Zustand stores under `src/stores`.
 
-The business domain is an inventory workflow: requests, distributions, travel, and acceptance. Keep new models, policies, and services aligned with the relationships and rules described in `../requirements.md`.
+### Frontend Navigation & Layouts
+Each role has a dedicated layout wrapper in `ui/src/shared/layouts/` that extends the generic `RoleLayout` with role-specific sidebar menu items:
+- **AdminLayout**: Dashboard, Users, Departments, Items, Categories, Vendors
+- **ManagerLayout**: Dashboard, Requests
+- **UserLayout**: Dashboard, Requests
+- **GeneralManagerLayout**: Dashboard, Requests, Distributions
+- **VendorLayout**: Dashboard, Items
+
+All new menu routes render `ComingSoonPage` stub until feature implementation begins.
+
+Use [`../requirements.md`](C:\laragon\www\imohon\requirements.md) as the detailed domain source and [`../kehendak.md`](C:\laragon\www\imohon\kehendak.md) as the high-level Malay summary.
 
 ## Build, Test, and Development Commands
-- `composer setup` installs PHP and Node dependencies, creates `.env` if needed, generates an app key, runs migrations, and builds assets.
-- `composer dev` starts the local stack: Laravel server, queue listener, log tailing, and Vite.
-- `composer test` clears cached config and runs the Laravel test suite.
-- `npm run dev` runs the Vite dev server only.
-- `npm run build` creates production frontend assets.
-- `vendor/bin/pint` formats PHP code to the project standard.
+- `cd api && composer setup` installs backend dependencies, creates `.env`, generates the app key, migrates MySQL, and builds default assets.
+- `cd api && php artisan serve` runs the Laravel API at `http://localhost:8000`.
+- `cd api && php artisan test` runs the backend test suite against `imohon_test`.
+- `cd api && php artisan db:seed --force` seeds roles, departments, and demo accounts such as `admin@local`.
+- `cd ui && npm install` installs the React frontend dependencies.
+- `cd ui && npm run dev` runs the frontend dev server.
+- `cd ui && npm run build` verifies the frontend bundle.
 
 ## Coding Style & Naming Conventions
-Follow `.editorconfig`: UTF-8, LF line endings, and 4 spaces for indentation; use 2 spaces only for YAML. Use PSR-4 namespaces under `App\\`, `Database\\Factories\\`, and `Database\\Seeders\\`. Name controllers, models, and jobs in singular PascalCase, for example `DistributionTravelController` and `ItemCategory`. Use snake_case for database columns and migration names such as `create_distribution_acceptances_table`.
+Follow `.editorconfig`: UTF-8, LF, and 4-space indentation. Keep Laravel code in PSR-4 namespaces under `App\\...`; use PascalCase for controllers, models, enums, and seeders. Use snake_case for database columns and migration names. In `ui/`, keep module names aligned to backend resources, for example `admin/users`, and prefer Axios service names that mirror Laravel resource actions such as `users.index` and `users.store`.
 
 ## Testing Guidelines
-Write request and workflow tests in `tests/Feature`; keep isolated logic tests in `tests/Unit`. Name test files after the class under test or behavior, for example `RequestApprovalTest.php`. Prefer descriptive methods such as `test_admin_cannot_create_second_distribution_attempt()`. Add coverage for validation, authorization, Eloquent relationships, and inventory constraints before opening a PR.
+Put backend HTTP/auth/workflow coverage in `api/tests/Feature` and isolated logic in `api/tests/Unit`. Frontend changes must at minimum pass `npm run build`. When changing login, logout, or role access, verify Sanctum SPA auth still works between `http://localhost:5173` and `http://localhost:8000`.
 
 ## Commit & Pull Request Guidelines
-Current Git history is minimal (`init`), so use short, imperative commit subjects going forward, for example `Add distribution approval policy`. Keep each commit focused on one logical change. PRs should include a brief summary, affected routes or models, migration notes, test evidence (`composer test`), and sample payloads or screenshots when response shape or UI-facing assets change.
+Use short imperative commits, for example `Add Sanctum login flow`. Keep backend and frontend changes grouped by feature, not by file type. PRs should include migration or seeding notes, test evidence (`php artisan test`, `npm run build`), and screenshots for UI changes.
 
 ## Security & Configuration Tips
-Do not commit `.env`, secrets, or generated files from `storage/`. Use `.env.example` for new variables. When adding auth or role checks, keep Laravel Sanctum and `spatie/laravel-permission` as the source of truth for API access control.
+Do not commit `.env` or secrets. For local SPA auth, keep `SANCTUM_STATEFUL_DOMAINS` and `CORS_ALLOWED_ORIGINS` aligned with the UI dev server. Demo logins are seeded with password `password`; treat them as local-only bootstrap accounts.
