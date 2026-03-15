@@ -20,6 +20,7 @@ export default function CategoryTable({ categories, onDelete, onReorder }) {
             <th>Slug</th>
             <th>Description</th>
             <th>Parent</th>
+            <th>Type</th>
             <th>Status</th>
             <th className="text-end">Actions</th>
             <th className="text-end">Order</th>
@@ -37,6 +38,7 @@ export default function CategoryTable({ categories, onDelete, onReorder }) {
               <td>{category.slug}</td>
               <td>{category.description || '-'}</td>
               <td>{category.parent_name || '-'}</td>
+              <td className="text-capitalize">{category.type || '-'}</td>
               <td>
                 <StatusPill active={category.is_active} />
               </td>

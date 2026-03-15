@@ -36,7 +36,7 @@ export default function AdminCategoriesIndexPage() {
 
     return options.concat(
       allCategories
-        .filter((category) => category.has_children || category.depth === 0)
+        .filter((category) => category.type === 'folder')
         .map((category) => ({
           value: category.id,
           label: `${'\u00A0'.repeat((category.depth || 0) * 2)}${category.name}`,

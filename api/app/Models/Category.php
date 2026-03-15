@@ -11,7 +11,11 @@ class Category extends Model
     use HasFactory;
     use NodeTrait;
 
+    public const TYPE_FOLDER = 'folder';
+    public const TYPE_ITEM = 'item';
+
     protected $fillable = [
+        'type',
         'name',
         'slug',
         'description',
@@ -30,6 +34,9 @@ class Category extends Model
         static::creating(function (self $category): void {
             if ($category->is_active === null) {
                 $category->is_active = true;
+            }
+            if ($category->type === null) {
+                $category->type = self::TYPE_ITEM;
             }
         });
     }

@@ -8,13 +8,42 @@ export default function CategoryForm({
   submitLabel,
   validationErrors = {},
   parentOptions = [],
+  showParentSelect = true,
+  showTypeSelector = false,
 }) {
   const inputClassName = (field) => `form-control ${validationErrors[field] ? 'is-invalid' : ''}`.trim();
   const selectClassName = (field) => `form-select ${validationErrors[field] ? 'is-invalid' : ''}`.trim();
   const firstError = (field) => validationErrors[field]?.[0];
 
+  const typeOptions = [
+    { label: 'Folder', value: 'folder' },
+    { label: 'Item', value: 'item' },
+  ];
+
   return (
     <form onSubmit={onSubmit} className="row g-4">
+      {showTypeSelector && (
+        <div className="col-md-6">
+          <label htmlFor="type" className="form-label">
+            Type
+          </label>
+          <select
+            id="type"
+            name="type"
+            value={form.type}
+            onChange={onChange}
+            className={selectClassName('type')}
+          >
+            {typeOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <div className="invalid-feedback">{firstError('type')}</div>
+        </div>
+      )}
+
       <div className="col-md-6">
         <label htmlFor="name" className="form-label">
           Name
@@ -61,27 +90,33 @@ export default function CategoryForm({
         <div className="invalid-feedback">{firstError('description')}</div>
       </div>
 
-      <div className="col-md-6">
-        <label htmlFor="parent_id" className="form-label">
-          Parent category
-        </label>
-        <select
-          id="parent_id"
-          name="parent_id"
-          value={form.parent_id || ''}
-          onChange={onChange}
-          className={selectClassName('parent_id')}
-        >
-          <option value="">No parent (root)</option>
-          {parentOptions.map((option) => (
-            <option key={option.id} value={option.id}>
-              {'\u00A0'.repeat(option.depth * 2)}
-              {option.name}
-            </option>
-          ))}
-        </select>
-        <div className="invalid-feedback">{firstError('parent_id')}</div>
-      </div>
+      {showParentSelect && (
+        <div className="col-md-6">
+          <label htmlFor="parent_id" className="form-label">
+            Parent category
+          </label>
+          <select
+            id="parent_id"
+            name="parent_id"
+            value={form.parent_id || ''}
+            onChange={onChange}
+            className={selectClassName('parent_id')}
+          >
+            <option value="">No parent (root)</option>
+            {parentOptions.map((option) => (
+              <option key={option.id} value={option.id}>
+                {'\u00A0'.repeat(option.depth * 2)}
+                {option.name}
+              </option>
+            ))}
+          </select>
+          <div className="invalid-feedback">{firstError('parent_id')}</div>
+        </div>
+      )}
+
+      {!showParentSelect && (
+        <input type="hidden" name="parent_id" value="" />
+      )}
 
       <div className="col-md-6">
         <div className="form-check form-switch mt-4">

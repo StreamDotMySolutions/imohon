@@ -14,6 +14,7 @@ class CategorySeeder extends Seeder
             'slug' => 'computer-peripherals',
             'description' => 'Root category for computer-related accessories.',
             'is_active' => true,
+            'type' => Category::TYPE_FOLDER,
         ]);
 
         $children = [
@@ -33,6 +34,7 @@ class CategorySeeder extends Seeder
             $peripherals->children()->create(array_merge($child, [
                 'description' => "{$child['name']} for laptops and desktops.",
                 'is_active' => true,
+                'type' => Category::TYPE_ITEM,
             ]));
         }
     }

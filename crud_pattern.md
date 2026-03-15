@@ -18,8 +18,9 @@ When you add a new resource today, copy the Category/Department pattern:
 3. **Pages & components**
    - Duplicate the index/show/create/edit page structure from `admin/categories`: each page uses `PageHeader`, `FeedbackAlert`, and `LoadingBlock`, with the form/table components wired to the store.
    - Provide a table component that renders the columns the backend exposes (statuses, parent info, etc.) and add the rearrange controls (↑/↓ buttons) that call the store’s ordering action.
-   - Build a form component whose props include the `form` state, `validationErrors`, helper lists (parents/departments), and submit label.
-   - Handle deletions via `ConfirmModal`, use `BackLink` for navigation, and show status via `StatusPill`.
+- Build a form component whose props include the `form` state, `validationErrors`, helper lists (parents/departments), and submit label.
+- Handle deletions via `ConfirmModal`, use `BackLink` for navigation, and show status via `StatusPill`.
+- If you need to distinguish folders/items, drive the create page with a two-step flow (type choice first, then the form) and hide/require parent selectors accordingly while keeping the form reusable for edits.
 
 4. **Routing updates**
    - Import the new pages into `ui/src/routes/index.jsx` and replace any placeholder `ComingSoon` entries under both `/admin` and `/system`.

@@ -8,6 +8,7 @@ import CategoryForm from '../components/CategoryForm';
 import { useAdminCategoriesStore } from '../store/adminCategoriesStore';
 
 const emptyForm = {
+  type: '',
   name: '',
   slug: '',
   description: '',
@@ -37,12 +38,25 @@ export default function AdminCategoriesEditPage() {
     fetchAllCategories();
   }, [fetchCategory, fetchAllCategories, categoryId]);
 
+  const parentOptions = useMemo(
+    () =>
+      allCategories
+        .filter((category) => category.type === 'folder')
+        .map((category) => ({
+          id: category.id,
+          name: category.name,
+          depth: category.depth || 0,
+        })),
+    [allCategories],
+  );
+
   useEffect(() => {
     if (!selectedCategory) {
       return;
     }
 
     setForm({
+      type: selectedCategory.type || '',
       name: selectedCategory.name || '',
       slug: selectedCategory.slug || '',
       description: selectedCategory.description || '',
@@ -98,11 +112,9 @@ export default function AdminCategoriesEditPage() {
         saving={saving}
         submitLabel="Update category"
         validationErrors={normalizedErrors}
-        parentOptions={allCategories.map((category) => ({
-          id: category.id,
-          name: category.name,
-          depth: category.depth || 0,
-        }))}
+        parentOptions={parentOptions}
+        showParentSelect={form.type === 'item'}
+        showTypeSelector
       />
     </div>
   );

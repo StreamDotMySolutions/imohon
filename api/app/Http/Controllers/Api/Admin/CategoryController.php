@@ -18,10 +18,10 @@ class CategoryController extends Controller
     {
         $query = Category::query()->withDepth()->defaultOrder();
 
-        if ($request->filled('parent_id')) {
-            $query->where('parent_id', $request->input('parent_id'));
-        } elseif ($request->has('parent_id') && $request->input('parent_id') === 'root') {
+        if ($request->has('parent_id') && $request->input('parent_id') === 'root') {
             $query->whereNull('parent_id');
+        } elseif ($request->filled('parent_id')) {
+            $query->where('parent_id', $request->input('parent_id'));
         }
 
         $categories = $query->paginate($request->integer('per_page', 15));
@@ -36,13 +36,14 @@ class CategoryController extends Controller
         $data = $request->validated();
 
         $category = new Category([
+            'type' => $data['type'],
             'name' => $data['name'],
             'slug' => $data['slug'],
             'description' => $data['description'] ?? null,
             'is_active' => $data['is_active'] ?? true,
         ]);
 
-        if (! empty($data['parent_id'])) {
+        if ($data['type'] === Category::TYPE_ITEM && ! empty($data['parent_id'])) {
             $parent = Category::find($data['parent_id']);
             if ($parent) {
                 $category->appendToNode($parent);
@@ -67,6 +68,7 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, Category $category): JsonResponse
     {
         $data = Arr::only($request->validated(), [
+            'type',
             'name',
             'slug',
             'description',
@@ -75,14 +77,14 @@ class CategoryController extends Controller
 
         $category->fill($data);
 
-        if ($request->filled('parent_id')) {
-            $parent = Category::find($request->input('parent_id'));
+        $parentId = $request->input('parent_id');
+
+        if ($data['type'] === Category::TYPE_ITEM && $parentId) {
+            $parent = Category::find($parentId);
             if ($parent) {
                 $category->appendToNode($parent);
-            } else {
-                $category->saveAsRoot();
             }
-        } elseif ($request->has('parent_id') && $request->input('parent_id') === null) {
+        } elseif ($data['type'] === Category::TYPE_FOLDER) {
             $category->saveAsRoot();
         }
 
@@ -156,6 +158,7 @@ class CategoryController extends Controller
             'id' => $category->id,
             'name' => $category->name,
             'slug' => $category->slug,
+            'type' => $category->type,
             'description' => $category->description,
             'is_active' => $category->is_active,
             'parent_id' => $category->parent_id,

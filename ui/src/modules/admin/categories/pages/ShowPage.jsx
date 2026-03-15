@@ -71,6 +71,10 @@ export default function AdminCategoriesShowPage() {
                   <td>{selectedCategory.parent_name || 'Root'}</td>
                 </tr>
                 <tr>
+                  <th className="text-secondary">Type</th>
+                  <td className="text-capitalize">{selectedCategory.type}</td>
+                </tr>
+                <tr>
                   <th className="text-secondary">Status</th>
                   <td>
                     <StatusPill active={selectedCategory.is_active} />
