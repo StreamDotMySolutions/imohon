@@ -16,10 +16,15 @@ class CategoryController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $categories = Category::query()
-            ->withDepth()
-            ->defaultOrder()
-            ->paginate($request->integer('per_page', 15));
+        $query = Category::query()->withDepth()->defaultOrder();
+
+        if ($request->filled('parent_id')) {
+            $query->where('parent_id', $request->input('parent_id'));
+        } elseif ($request->has('parent_id') && $request->input('parent_id') === 'root') {
+            $query->whereNull('parent_id');
+        }
+
+        $categories = $query->paginate($request->integer('per_page', 15));
 
         $categories->through(fn (Category $category) => $this->transformCategory($category));
 

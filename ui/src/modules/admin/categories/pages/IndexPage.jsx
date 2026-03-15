@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ConfirmModal from '../../../../shared/components/ConfirmModal';
 import FeedbackAlert from '../../../../shared/components/FeedbackAlert';
@@ -14,15 +14,35 @@ export default function AdminCategoriesIndexPage() {
     pagination,
     loading,
     error,
+    filters,
     fetchCategories,
     deleteCategory,
     orderCategory,
+    fetchAllCategories,
+    allCategories,
   } = useAdminCategoriesStore();
   const [deleteTarget, setDeleteTarget] = useState(null);
 
   useEffect(() => {
     fetchCategories();
-  }, [fetchCategories]);
+    fetchAllCategories();
+  }, [fetchCategories, fetchAllCategories]);
+
+  const parentOptions = useMemo(() => {
+    const options = [
+      { label: 'All parents', value: '' },
+      { label: 'Root (no parent)', value: 'root' },
+    ];
+
+    return options.concat(
+      allCategories.map((category) => ({
+        value: category.id,
+        label: `${'\u00A0'.repeat((category.depth || 0) * 2)}${category.name}`,
+      })),
+    );
+  }, [allCategories]);
+
+  const parentFilterValue = filters?.parent_id ?? '';
 
   const handlePageChange = (page) => {
     fetchCategories({ page });
@@ -45,6 +65,11 @@ export default function AdminCategoriesIndexPage() {
     await orderCategory(categoryId, direction);
   };
 
+  const handleParentChange = (event) => {
+    const parentValue = event.target.value;
+    fetchCategories({ page: 1, parent_id: parentValue });
+  };
+
   return (
     <div>
       <PageHeader
@@ -58,6 +83,23 @@ export default function AdminCategoriesIndexPage() {
       />
 
       {error ? <FeedbackAlert message={error} /> : null}
+
+      <div className="d-flex gap-3 align-items-center mb-3">
+        <label className="d-flex align-items-center gap-2 mb-0">
+          Parent:
+          <select
+            className="form-select form-select-sm"
+            value={parentFilterValue}
+            onChange={handleParentChange}
+          >
+            {parentOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
 
       {loading ? (
         <LoadingBlock message="Loading categories..." />

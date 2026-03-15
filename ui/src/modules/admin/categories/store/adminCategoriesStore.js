@@ -15,6 +15,7 @@ export const useAdminCategoriesStore = create((set, get) => ({
   filters: {
     page: 1,
     per_page: 15,
+    parent_id: '',
   },
   selectedCategory: null,
   loading: false,

@@ -1,29 +1,31 @@
-### How to add a new CRUD module
+### CRUD playbook example
 
-1. **Backend preparation**
-   - Require any packages needed (e.g., `kalnoy/nestedset`) and run migrations for the new model.
-   - Create the migration with all required columns plus indexes/traits (`NestedSet::columns` if hierarchical).
-   - Add the Eloquent model under `App\Models` with `$fillable`, casts (Malaysia `d/m/Y H:i` format when needed), and trait usage.
-   - Implement `Store`, `Update`, and any auxiliary `Order` requests validating uniqueness, relationships, and enum constraints.
-   - Build the controller mirroring `DepartmentController`: paginate in `index`, use transformer helpers, handle parent assignment/deletion constraints, and add special endpoints (`order`, etc.).
-   - Register the resource route (and any custom actions) under `routes/api.php` inside the `auth:sanctum` + `role:Admin|System` group.
-   - Seed sample data via new seeder and register it in `DatabaseSeeder`.
+When you add a new resource today, copy the Category/Department pattern:
 
-2. **Shared APIs/Stores**
-   - Add an API helper under `ui/src/modules/{area}/api` pointing to `/admin/<resource>` REST endpoints plus any custom patch actions.
-   - Create a Zustand store under `ui/src/modules/{area}/store` that mirrors existing stores: manage data/pagination/filters, track loading/saving, handle validation errors, and expose CRUD/ordering helpers.
-   - Use shared components (`Pagination`, `ConfirmModal`, `BackLink`, etc.) so the module keeps the same feel.
+1. **Backend prep**
+   - Install any packages (e.g., `kalnoy/nestedset`), add the migration, and seed some fixtures.
+   - Create the model with `$fillable`, casts, and traits (NestedSet if it’s hierarchical) plus any default attribute handling.
+   - Write `Store`/`Update` requests that enforce uniqueness, parent relations, enums, etc., and add extra requests such as `OrderCategoryRequest` when you expose a reorder action.
+   - Build the controller close to `CategoryController`: paginate with `defaultOrder()` or `latest()`, use a transformer that formats `created_at`/`updated_at`, and guard `destroy` with the same existence checks; add custom actions (ordering, bulk operations) as needed.
+   - Register the resource routes (and custom PATCH endpoints) in `routes/api.php` inside `auth:sanctum` + `role:Admin|System`.
+   - Seed relevant data and wire the seeder into `DatabaseSeeder`.
 
-3. **Pages & Components**
-   - Build `index`, `show`, `create`, and `edit` pages under `ui/src/modules/{area}/pages`, each reusing `PageHeader`, `FeedbackAlert`, `LoadingBlock`, and form/table components.
-   - Implement the table component to show necessary columns plus actions and reorder controls (up/down arrows hitting the store’s `order` method).
-   - Build a reusable form component for create/edit that accepts `form`, `validationErrors`, and helper props like parent options and status toggles.
-   - Use `ConfirmModal` for delete actions and `BackLink` for navigation.
+2. **Shared API/store**
+   - Create `ui/src/modules/<resource>/api/<resource>Api.js` mirroring the HTTP methods your controller exposes (including PATCH for ordering).
+   - Add a Zustand store to handle the REST cycle: filters/pagination, loading/saving flags, validationErrors, and CRUD plus order/delete helpers that re-fetch after mutations.
+   - Leverage shared UI helpers (Pagination, ConfirmModal, BackLink, StatusPill) so the new module inherits the global behavior.
 
-4. **Routing**
-   - Update `ui/src/routes/index.jsx` to import the new pages and replace any placeholder `ComingSoonPage` entries with the real routes for both `/admin` and `/system` sections.
-   - Ensure the layout stays within the shared `AdminLayout` (or other role-based layout) so nav/sidebar remains consistent.
+3. **Pages & components**
+   - Duplicate the index/show/create/edit page structure from `admin/categories`: each page uses `PageHeader`, `FeedbackAlert`, and `LoadingBlock`, with the form/table components wired to the store.
+   - Provide a table component that renders the columns the backend exposes (statuses, parent info, etc.) and add the rearrange controls (↑/↓ buttons) that call the store’s ordering action.
+   - Build a form component whose props include the `form` state, `validationErrors`, helper lists (parents/departments), and submit label.
+   - Handle deletions via `ConfirmModal`, use `BackLink` for navigation, and show status via `StatusPill`.
 
-5. **Documentation/Test**
-   - Run `npm run build` (front-end) and `php artisan migrate`/`db:seed` (backend) to ensure everything compiles and the data exists.
-   - Document the new module in this file so future CRUD work can follow the same sequence.
+4. **Routing updates**
+   - Import the new pages into `ui/src/routes/index.jsx` and replace any placeholder `ComingSoon` entries under both `/admin` and `/system`.
+   - Keep those routes nested inside the shared `AdminLayout` (or equivalent) so navigation/sidebar remains consistent with the rest of the shell.
+
+5. **Verification**
+   - Run `npm run build` to confirm the UI compiles.
+   - Run `php artisan migrate`/`db:seed` (with the correct database driver) so the backend schema and seed data exist.
+   - Add a bullet or section describing the new resource inside this document so future engineers can reapply the same steps.
