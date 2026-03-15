@@ -10,9 +10,7 @@ import { adminCategoriesApi } from '../../categories/api/adminCategoriesApi';
 const initialForm = {
   contract_number: '',
   vendor_id: '',
-  vendor_name: '',
-  category_id: '',
-  total: '',
+  items: [],
   date_start: '',
   date_end: '',
   date_delivery: '',
@@ -39,9 +37,7 @@ export default function AdminContractsCreatePage() {
     adminCategoriesApi
       .index({ all: 1, per_page: 300 })
       .then((response) => {
-        setCategoryOptions(
-          response.data.data.filter((category) => category.type === 'item'),
-        );
+        setCategoryOptions(response.data.data);
       })
       .catch(() => {
         setCategoryOptions([]);
@@ -55,7 +51,7 @@ export default function AdminContractsCreatePage() {
 
     setForm((current) => ({
       ...current,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === 'checkbox' ? checked : type === 'array' ? value : value,
     }));
   };
 
@@ -66,7 +62,6 @@ export default function AdminContractsCreatePage() {
       const payload = {
         ...form,
         vendor_id: form.vendor_id || null,
-        total: Number(form.total),
       };
       const contract = await createContract(payload);
       navigate(`/admin/contracts/${contract.id}`);

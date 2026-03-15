@@ -60,15 +60,7 @@ export default function AdminContractsShowPage() {
                 </tr>
                 <tr>
                   <th className="text-secondary">Vendor</th>
-                  <td>{selectedContract.vendor_name}</td>
-                </tr>
-                <tr>
-                  <th className="text-secondary">Category</th>
-                  <td>{selectedContract.category_name}</td>
-                </tr>
-                <tr>
-                  <th className="text-secondary">Total</th>
-                  <td>{selectedContract.total}</td>
+                  <td>{selectedContract.vendor?.name || '-'}</td>
                 </tr>
                 <tr>
                   <th className="text-secondary">Start</th>
@@ -96,6 +88,32 @@ export default function AdminContractsShowPage() {
                   <th className="text-secondary">Updated</th>
                   <td>{selectedContract.updated_at}</td>
                 </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 className="h6 mt-4 mb-3">Items</h3>
+          <div className="table-responsive">
+            <table className="table table-sm">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                {selectedContract.items && selectedContract.items.length > 0 ? (
+                  selectedContract.items.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.category_name}</td>
+                      <td>{item.quantity}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="2" className="text-muted">No items</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

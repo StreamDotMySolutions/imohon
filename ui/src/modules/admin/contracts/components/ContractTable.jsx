@@ -18,8 +18,7 @@ export default function ContractTable({ contracts, onDelete, onToggleStatus }) {
           <tr>
             <th>Contract</th>
             <th>Vendor</th>
-            <th>Category</th>
-            <th>Total</th>
+            <th>Items</th>
             <th>Dates</th>
             <th>Status</th>
             <th className="text-end">Actions</th>
@@ -32,12 +31,19 @@ export default function ContractTable({ contracts, onDelete, onToggleStatus }) {
                 <div className="fw-semibold">{contract.contract_number}</div>
                 <small className="text-muted">{contract.created_at}</small>
               </td>
-              <td>{contract.vendor_name || '-'}</td>
+              <td>{contract.vendor?.name || '-'}</td>
               <td>
-                <div>{contract.category_name || '-'}</div>
-                <small className="text-muted text-capitalize">{contract.category_type || '-'}</small>
+                {contract.items && contract.items.length > 0 ? (
+                  <div>
+                    <div>{contract.items.length} item(s)</div>
+                    <small className="text-muted">
+                      {contract.items.map((item) => item.category_name).join(', ')}
+                    </small>
+                  </div>
+                ) : (
+                  <span className="text-muted">-</span>
+                )}
               </td>
-              <td>{contract.total ?? '-'}</td>
               <td>
                 <div className="small text-muted">
                   Start: {contract.date_start || '-'}

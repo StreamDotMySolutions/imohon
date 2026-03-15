@@ -12,9 +12,6 @@ class Contract extends Model
     protected $fillable = [
         'contract_number',
         'vendor_id',
-        'vendor_name',
-        'category_id',
-        'total',
         'date_start',
         'date_end',
         'date_delivery',
@@ -33,9 +30,9 @@ class Contract extends Model
         return $this->belongsTo(Vendor::class);
     }
 
-    public function category()
+    public function items()
     {
-        return $this->belongsTo(Category::class);
+        return $this->hasMany(ContractItem::class);
     }
 
     public function inventories()

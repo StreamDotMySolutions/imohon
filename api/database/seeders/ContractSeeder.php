@@ -23,8 +23,9 @@ class ContractSeeder extends Seeder
             [
                 'contract_number' => 'CT-1001',
                 'vendor_code' => 'VND-1001',
-                'category_slug' => 'keyboards',
-                'total' => 50,
+                'items' => [
+                    ['category_slug' => 'mechanical-keyboards', 'quantity' => 50],
+                ],
                 'date_start' => Carbon::now()->subMonths(1),
                 'date_end' => Carbon::now()->addMonths(11),
                 'date_delivery' => Carbon::now()->subDays(2),
@@ -32,8 +33,9 @@ class ContractSeeder extends Seeder
             [
                 'contract_number' => 'CT-1002',
                 'vendor_code' => 'VND-1002',
-                'category_slug' => 'mice',
-                'total' => 80,
+                'items' => [
+                    ['category_slug' => 'gaming-mice', 'quantity' => 80],
+                ],
                 'date_start' => Carbon::now()->startOfMonth(),
                 'date_end' => Carbon::now()->addMonths(6),
                 'date_delivery' => Carbon::now()->addDays(7),
@@ -41,8 +43,9 @@ class ContractSeeder extends Seeder
             [
                 'contract_number' => 'CT-1003',
                 'vendor_code' => 'VND-1001',
-                'category_slug' => 'monitors',
-                'total' => 20,
+                'items' => [
+                    ['category_slug' => 'ultra-wide-monitors', 'quantity' => 20],
+                ],
                 'date_start' => Carbon::now()->subMonths(2),
                 'date_end' => Carbon::now()->addMonths(2),
                 'date_delivery' => Carbon::now()->addDays(3),
@@ -51,25 +54,33 @@ class ContractSeeder extends Seeder
 
         foreach ($entries as $entry) {
             $vendor = $vendors->get($entry['vendor_code']);
-            $category = $categories->get($entry['category_slug']);
 
-            if (! $vendor || ! $category) {
+            if (! $vendor) {
                 continue;
             }
 
-            Contract::updateOrCreate(
+            $contract = Contract::updateOrCreate(
                 ['contract_number' => $entry['contract_number']],
                 [
                     'vendor_id' => $vendor->id,
-                    'vendor_name' => $vendor->name,
-                    'category_id' => $category->id,
-                    'total' => $entry['total'],
                     'date_start' => $entry['date_start'],
                     'date_end' => $entry['date_end'],
                     'date_delivery' => $entry['date_delivery'],
                     'active' => true,
                 ],
             );
+
+            // Sync items
+            $contract->items()->delete();
+            foreach ($entry['items'] as $item) {
+                $category = $categories->get($item['category_slug']);
+                if ($category) {
+                    $contract->items()->create([
+                        'category_id' => $category->id,
+                        'quantity' => $item['quantity'],
+                    ]);
+                }
+            }
         }
     }
 }

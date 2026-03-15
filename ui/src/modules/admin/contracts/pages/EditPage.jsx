@@ -11,9 +11,7 @@ import { adminCategoriesApi } from '../../categories/api/adminCategoriesApi';
 const emptyForm = {
   contract_number: '',
   vendor_id: '',
-  vendor_name: '',
-  category_id: '',
-  total: '',
+  items: [],
   date_start: '',
   date_end: '',
   date_delivery: '',
@@ -45,9 +43,7 @@ export default function AdminContractsEditPage() {
     adminCategoriesApi
       .index({ all: 1, per_page: 300 })
       .then((response) => {
-        setCategoryOptions(
-          response.data.data.filter((category) => category.type === 'item'),
-        );
+        setCategoryOptions(response.data.data);
       })
       .catch(() => {
         setCategoryOptions([]);
@@ -62,9 +58,12 @@ export default function AdminContractsEditPage() {
     setForm({
       contract_number: selectedContract.contract_number || '',
       vendor_id: selectedContract.vendor_id || '',
-      vendor_name: selectedContract.vendor_name || '',
-      category_id: selectedContract.category_id || '',
-      total: selectedContract.total ?? '',
+      items: (selectedContract.items || []).map((item) => ({
+        id: item.id,
+        category_id: item.category_id,
+        category_name: item.category_name,
+        quantity: item.quantity,
+      })),
       date_start: selectedContract.date_start_raw || '',
       date_end: selectedContract.date_end_raw || '',
       date_delivery: selectedContract.date_delivery_raw || '',
@@ -81,7 +80,7 @@ export default function AdminContractsEditPage() {
 
     setForm((current) => ({
       ...current,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === 'checkbox' ? checked : type === 'array' ? value : value,
     }));
   };
 
@@ -92,7 +91,6 @@ export default function AdminContractsEditPage() {
       await updateContract(contractId, {
         ...form,
         vendor_id: form.vendor_id || null,
-        total: Number(form.total),
       });
       navigate(`/admin/contracts/${contractId}`);
     } catch {

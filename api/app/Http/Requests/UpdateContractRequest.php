@@ -30,13 +30,13 @@ class UpdateContractRequest extends FormRequest
                 Rule::unique('contracts', 'contract_number')->ignore($contract?->id),
             ],
             'vendor_id' => ['nullable', 'integer', Rule::exists('vendors', 'id')],
-            'vendor_name' => ['required_without:vendor_id', 'string', 'max:255'],
-            'category_id' => [
+            'items' => ['required', 'array', 'min:1'],
+            'items.*.category_id' => [
                 'required',
                 'integer',
                 Rule::exists('categories', 'id')->where(fn ($query) => $query->where('type', Category::TYPE_ITEM)),
             ],
-            'total' => ['required', 'integer', 'min:0'],
+            'items.*.quantity' => ['required', 'integer', 'min:1'],
             'date_start' => ['required', 'date'],
             'date_end' => ['nullable', 'date', 'after_or_equal:date_start'],
             'date_delivery' => ['nullable', 'date'],
