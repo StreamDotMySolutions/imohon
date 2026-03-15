@@ -35,10 +35,12 @@ export default function AdminCategoriesIndexPage() {
     ];
 
     return options.concat(
-      allCategories.map((category) => ({
-        value: category.id,
-        label: `${'\u00A0'.repeat((category.depth || 0) * 2)}${category.name}`,
-      })),
+      allCategories
+        .filter((category) => category.has_children || category.depth === 0)
+        .map((category) => ({
+          value: category.id,
+          label: `${'\u00A0'.repeat((category.depth || 0) * 2)}${category.name}`,
+        })),
     );
   }, [allCategories]);
 
