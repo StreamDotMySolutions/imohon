@@ -21,6 +21,7 @@ export default function AdminCategoriesIndexPage() {
     orderCategory,
     fetchAllCategories,
     allCategories,
+    toggleStatus,
   } = useAdminCategoriesStore();
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -133,7 +134,7 @@ export default function AdminCategoriesIndexPage() {
   };
 
   const handleStatusToggle = async (category) => {
-    await updateCategory(category.id, { is_active: !category.is_active });
+    await toggleStatus(category.id, !category.is_active);
   };
 
   const handleParentChange = (event) => {
@@ -242,6 +243,7 @@ export default function AdminCategoriesIndexPage() {
           <CategoryTable
             categories={categories}
             orderingCategoryId={orderingCategoryId}
+            pagination={pagination}
             onDelete={setDeleteTarget}
             onReorder={handleReorder}
             onToggleStatus={handleStatusToggle}
