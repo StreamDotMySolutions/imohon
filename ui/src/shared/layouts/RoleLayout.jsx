@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 
@@ -86,6 +86,7 @@ export default function RoleLayout({ title, basePath, extraLinks = [], showSideb
     { label: 'Dashboard', to: basePath, end: true },
     ...extraLinks,
   ];
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const handleLogout = async () => {
     await logout();
@@ -93,7 +94,7 @@ export default function RoleLayout({ title, basePath, extraLinks = [], showSideb
   };
 
   return (
-    <div className="page">
+    <div className={`page ${showSidebar && sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       {showSidebar ? (
         <aside className="navbar navbar-vertical navbar-expand-lg">
           <div className="container-fluid">
@@ -101,7 +102,7 @@ export default function RoleLayout({ title, basePath, extraLinks = [], showSideb
               <div className="small text-uppercase fw-semibold">Imohon</div>
               <span className="fs-5">{title}</span>
             </h1>
-            <div className="navbar-collapse show">
+            <div className="navbar-collapse show collapse" id="sidebarMenu">
               <ul className="navbar-nav pt-lg-3">
                 {links.map((link) => (
                   <li className="nav-item" key={link.to}>
@@ -130,6 +131,24 @@ export default function RoleLayout({ title, basePath, extraLinks = [], showSideb
             <div className="content-navbar-title">{title}</div>
           </div>
           <div className="content-navbar-actions">
+            {showSidebar ? (
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-secondary me-2"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebarMenu"
+                aria-controls="sidebarMenu"
+                aria-expanded={!sidebarCollapsed}
+                aria-label="Toggle sidebar"
+                onClick={() => setSidebarCollapsed((prev) => !prev)}
+              >
+                <span className="icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M2 2h1v12H2zm3 0h1v12H5zm3 0h1v12H8zm3 0h1v12h-1z" />
+                  </svg>
+                </span>
+              </button>
+            ) : null}
             <div className="dropdown">
               <button
                 type="button"

@@ -73,6 +73,17 @@ body {
   color: #16202a;
 }
 
+.page.sidebar-collapsed aside {
+  width: 0;
+  min-width: 0;
+  padding: 0;
+  border-right: 0;
+}
+
+.page.sidebar-collapsed .page-wrapper {
+  margin-left: 0;
+}
+
 .page-wrapper {
   flex: 1 1 auto;
   min-width: 0;
