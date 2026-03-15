@@ -98,11 +98,12 @@ class CategoryController extends Controller
 
     public function destroy(Category $category): JsonResponse
     {
-        $descendantCount = $category->descendants()->count();
-        $affected = $descendantCount + 1;
+        $subtreeQuery = Category::descendantsAndSelf($category->id);
+        $nodesToDelete = $subtreeQuery->get();
+        $affected = $nodesToDelete->count();
 
-        DB::transaction(function () use ($category): void {
-            $category->descendantsAndSelf()->delete();
+        DB::transaction(function () use ($nodesToDelete): void {
+            $nodesToDelete->each(fn (Category $node) => $node->delete());
         });
 
         return response()->json([
