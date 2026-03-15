@@ -15,6 +15,7 @@
   "dependencies": {
     "@tabler/core": "^1.0.0",
     "axios": "^1.11.0",
+    "bootstrap-icons": "^1.13.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.30.1",

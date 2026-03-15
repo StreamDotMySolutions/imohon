@@ -190,24 +190,29 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: '/vendor',
-    element: (
-      <RequireAuth>
-        <RequireRole roles={['Vendor']}>
-          <VendorLayout />
-        </RequireRole>
-      </RequireAuth>
-    ),
-    children: [
-      { index: true, element: <RoleDashboardPage title="Vendor Dashboard" /> },
       {
-        path: 'items',
-        index: true,
-        element: <ComingSoonPage title="Items" />,
+        path: '/vendor',
+        element: (
+          <RequireAuth>
+            <RequireRole roles={['Vendor']}>
+              <VendorLayout />
+            </RequireRole>
+          </RequireAuth>
+        ),
+        children: [
+          { index: true, element: <RoleDashboardPage title="Vendor Dashboard" /> },
+          {
+            path: 'items',
+            index: true,
+            element: <ComingSoonPage title="Items" />,
+          },
+          {
+            path: 'distributions',
+            index: true,
+            element: <ComingSoonPage title="Distributions" />,
+          },
+        ],
       },
-    ],
-  },
   {
     path: '*',
     element: <NotFoundPage />,
