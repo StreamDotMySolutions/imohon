@@ -34,6 +34,34 @@ body {
   background: #fff;
 }
 
+.sidebar-toggle {
+  position: absolute;
+  top: 1rem;
+  right: -0.65rem;
+  transform: translateX(50%);
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  z-index: 10;
+}
+
+.sidebar-toggle .icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.page.sidebar-collapsed aside {
+  width: 0;
+  min-width: 0;
+  padding: 0;
+  border-right: 0;
+}
+
 .navbar-vertical .container-fluid {
   padding: 1rem 1rem 1.5rem;
 }
