@@ -121,36 +121,40 @@ export default function RoleLayout({ title, basePath, extraLinks = [], showSideb
               </ul>
             </div>
           </div>
-          <button
-            type="button"
-            className="sidebar-toggle btn btn-sm btn-outline-secondary"
-            data-bs-toggle="collapse"
-            data-bs-target="#sidebarMenu"
-            aria-controls="sidebarMenu"
-            aria-expanded={!sidebarCollapsed}
-            aria-label="Toggle sidebar"
-            onClick={() => setSidebarCollapsed((prev) => !prev)}
-          >
-            <span className="icon">
-              {sidebarCollapsed ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                  <path fillRule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708L7.793 3.999a.5.5 0 1 1 .707.707L5.207 8l3.293 3.293a.5.5 0 0 1-.707.707z" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                  <path fillRule="evenodd" d="M11.854 8.354a.5.5 0 0 1 0-.708L8.207 3.999a.5.5 0 1 1 .707-.707L13.293 7.64a.5.5 0 0 1 0 .707l-4.379 4.35a.5.5 0 1 1-.707-.707z" />
-                </svg>
-              )}
-            </span>
-          </button>
         </aside>
       ) : null}
 
       <div className="page-wrapper">
         <header className="content-navbar">
-          <div>
-            <div className="content-navbar-eyebrow">Imohon</div>
-            <div className="content-navbar-title">{title}</div>
+          <div className="d-flex align-items-center gap-3">
+            {showSidebar ? (
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-secondary"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebarMenu"
+                aria-controls="sidebarMenu"
+                aria-expanded={!sidebarCollapsed}
+                aria-label="Toggle sidebar"
+                onClick={() => setSidebarCollapsed((prev) => !prev)}
+              >
+                <span className="icon">
+                  {sidebarCollapsed ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path fillRule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708L7.793 3.999a.5.5 0 1 1 .707.707L5.207 8l3.293 3.293a.5.5 0 0 1-.707.707z" />
+                    </svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path fillRule="evenodd" d="M11.854 8.354a.5.5 0 0 1 0-.708L8.207 3.999a.5.5 0 1 1 .707-.707L13.293 7.64a.5.5 0 0 1 0 .707l-4.379 4.35a.5.5 0 1 1-.707-.707z" />
+                    </svg>
+                  )}
+                </span>
+              </button>
+            ) : null}
+            <div>
+              <div className="content-navbar-eyebrow">Imohon</div>
+              <div className="content-navbar-title">{title}</div>
+            </div>
           </div>
           <div className="content-navbar-actions">
             <div className="dropdown">
