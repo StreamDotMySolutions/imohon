@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import StatusPill from '../../../../shared/components/StatusPill';
 
-export default function CategoryTable({ categories, orderingCategoryId, onDelete, onReorder }) {
+export default function CategoryTable({ categories, orderingCategoryId, onDelete, onReorder, onToggleStatus }) {
   if (!categories.length) {
     return (
       <div className="text-center py-5 text-secondary">
@@ -91,7 +91,19 @@ export default function CategoryTable({ categories, orderingCategoryId, onDelete
                 )}
               </td>
               <td>
-                <StatusPill active={category.is_active} />
+                <div className="form-check form-switch">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    checked={category.is_active}
+                    aria-label="Toggle status"
+                    onChange={() => onToggleStatus(category)}
+                  />
+                  <label className="form-check-label ms-1">
+                    {category.is_active ? 'Active' : 'Inactive'}
+                  </label>
+                </div>
               </td>
               <td className="text-end">
                 <div className="btn-group btn-group-sm me-2">

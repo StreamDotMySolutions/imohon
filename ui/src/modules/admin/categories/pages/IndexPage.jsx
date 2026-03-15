@@ -132,6 +132,10 @@ export default function AdminCategoriesIndexPage() {
     await orderCategory(categoryId, direction);
   };
 
+  const handleStatusToggle = async (category) => {
+    await updateCategory(category.id, { is_active: !category.is_active });
+  };
+
   const handleParentChange = (event) => {
     const parentValue = event.target.value;
     setSearchParams((currentParams) => {
@@ -240,6 +244,7 @@ export default function AdminCategoriesIndexPage() {
             orderingCategoryId={orderingCategoryId}
             onDelete={setDeleteTarget}
             onReorder={handleReorder}
+            onToggleStatus={handleStatusToggle}
           />
           <Pagination
             pagination={pagination}
