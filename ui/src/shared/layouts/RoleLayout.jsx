@@ -63,6 +63,13 @@ function SidebarIcon({ label }) {
           <path d="M8.878 1.444a1 1 0 0 0-1.756 0l-6 10A1 1 0 0 0 2 13h12a1 1 0 0 0 .878-1.556zM7.002 5a1 1 0 1 1 2 0l-.35 3.507a.65.65 0 0 1-1.296 0zM8 12a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
         </svg>
       );
+    case 'Contracts':
+      return (
+        <svg {...iconProps}>
+          <path d="M9 3H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h6l4-4V4a1 1 0 0 0-1-1h-4z" />
+          <path d="M9 3v4h4" />
+        </svg>
+      );
     case 'Requests':
       return (
         <svg {...iconProps}>

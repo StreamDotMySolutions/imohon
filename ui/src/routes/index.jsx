@@ -12,6 +12,10 @@ import AdminCategoriesCreatePage from '../modules/admin/categories/pages/CreateP
 import AdminCategoriesEditPage from '../modules/admin/categories/pages/EditPage';
 import AdminCategoriesIndexPage from '../modules/admin/categories/pages/IndexPage';
 import AdminCategoriesShowPage from '../modules/admin/categories/pages/ShowPage';
+import AdminContractsCreatePage from '../modules/admin/contracts/pages/CreatePage';
+import AdminContractsEditPage from '../modules/admin/contracts/pages/EditPage';
+import AdminContractsIndexPage from '../modules/admin/contracts/pages/IndexPage';
+import AdminContractsShowPage from '../modules/admin/contracts/pages/ShowPage';
 import AdminLayout from '../shared/layouts/AdminLayout';
 import ManagerLayout from '../shared/layouts/ManagerLayout';
 import UserLayout from '../shared/layouts/UserLayout';
@@ -81,9 +85,27 @@ export const router = createBrowserRouter([
         ],
       },
       {
+        path: 'contracts',
+        children: [
+          { index: true, element: <AdminContractsIndexPage /> },
+          { path: 'create', element: <AdminContractsCreatePage /> },
+          { path: ':contractId', element: <AdminContractsShowPage /> },
+          { path: ':contractId/edit', element: <AdminContractsEditPage /> },
+        ],
+      },
+      {
         path: 'vendors',
         index: true,
         element: <ComingSoonPage title="Vendors" />,
+      },
+      {
+        path: 'contracts',
+        children: [
+          { index: true, element: <AdminContractsIndexPage /> },
+          { path: 'create', element: <AdminContractsCreatePage /> },
+          { path: ':contractId', element: <AdminContractsShowPage /> },
+          { path: ':contractId/edit', element: <AdminContractsEditPage /> },
+        ],
       },
     ],
   },
@@ -181,6 +203,15 @@ export const router = createBrowserRouter([
           { path: 'create', element: <AdminCategoriesCreatePage /> },
           { path: ':categoryId', element: <AdminCategoriesShowPage /> },
           { path: ':categoryId/edit', element: <AdminCategoriesEditPage /> },
+        ],
+      },
+      {
+        path: 'contracts',
+        children: [
+          { index: true, element: <AdminContractsIndexPage /> },
+          { path: 'create', element: <AdminContractsCreatePage /> },
+          { path: ':contractId', element: <AdminContractsShowPage /> },
+          { path: ':contractId/edit', element: <AdminContractsEditPage /> },
         ],
       },
       {

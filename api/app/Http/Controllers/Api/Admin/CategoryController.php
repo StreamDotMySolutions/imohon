@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderCategoryRequest;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Requests\UpdateCategoryStatusRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryService;
@@ -55,6 +56,16 @@ class CategoryController extends Controller
 
         return response()->json([
             'message' => 'Category updated successfully.',
+            'data' => CategoryResource::make($category),
+        ]);
+    }
+
+    public function status(UpdateCategoryStatusRequest $request, Category $category): JsonResponse
+    {
+        $category = $this->categoryService->setStatus($category, $request->boolean('is_active'));
+
+        return response()->json([
+            'message' => 'Category status updated successfully.',
             'data' => CategoryResource::make($category),
         ]);
     }

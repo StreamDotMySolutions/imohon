@@ -19,4 +19,7 @@ export const adminCategoriesApi = {
   order(categoryId, direction) {
     return http.patch(`/admin/categories/${categoryId}/order`, { direction });
   },
+  status(categoryId, isActive) {
+    return http.patch(`/admin/categories/${categoryId}/status`, { is_active: isActive });
+  },
 };

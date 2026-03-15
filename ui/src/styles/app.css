@@ -273,6 +273,10 @@ body {
   justify-content: flex-end;
 }
 
+.category-name-cell {
+  text-align: left;
+}
+
 .category-breadcrumb {
   display: flex;
   flex-wrap: wrap;

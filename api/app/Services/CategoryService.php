@@ -91,6 +91,14 @@ class CategoryService
         return $this->refreshCategory($category);
     }
 
+    public function setStatus(Category $category, bool $isActive): Category
+    {
+        $category->is_active = $isActive;
+        $category->save();
+
+        return $this->refreshCategory($category);
+    }
+
     public function delete(Category $category): int
     {
         $affected = $category->getDescendantCount() + 1;

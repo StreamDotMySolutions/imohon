@@ -165,15 +165,39 @@ export const useAdminCategoriesStore = create((set, get) => ({
       set({ orderingCategoryId: null });
       return response.data.data;
     } catch (error) {
+      const isEdgeError =
+        error.status === 422 &&
+        /already at the (?:top|bottom)/i.test(error.message);
+
       set({
         categories: previousCategories,
         orderingCategoryId: null,
-        error: error.message,
+        error: isEdgeError ? '' : error.message,
       });
-      throw error;
+
+      if (!isEdgeError) {
+        throw error;
+      }
     }
   },
   clearMessages() {
     set({ error: '', validationErrors: {} });
+  },
+  async toggleStatus(categoryId, isActive) {
+    const previousCategories = get().categories;
+    const nextCategories = previousCategories.map((category) =>
+      category.id === categoryId ? { ...category, is_active: isActive } : category,
+    );
+
+    set({ categories: nextCategories, error: '' });
+
+    try {
+      await adminCategoriesApi.status(categoryId, isActive);
+      await get().fetchCategories(get().filters, { silent: true });
+      return Promise.resolve();
+    } catch (error) {
+      set({ categories: previousCategories, error: error.message });
+      throw error;
+    }
   },
 }));

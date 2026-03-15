@@ -12,6 +12,7 @@ export default function AdminLayout() {
         { label: 'Departments', to: '/admin/departments' },
         { label: 'Items', to: '/admin/items' },
         { label: 'Categories', to: '/admin/categories' },
+        { label: 'Contracts', to: '/admin/contracts' },
         { label: 'Vendors', to: '/admin/vendors' },
         { label: 'Distributions', to: '/admin/distributions' },
       ]}
