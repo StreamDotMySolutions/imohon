@@ -139,9 +139,15 @@ export default function RoleLayout({ title, basePath, extraLinks = [], showSideb
                 onClick={() => setSidebarCollapsed((prev) => !prev)}
               >
                 <span className="icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M2 2h1v12H2zm3 0h1v12H5zm3 0h1v12H8zm3 0h1v12h-1z" />
-                  </svg>
+                  {sidebarCollapsed ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path fillRule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708L7.793 3.999a.5.5 0 1 1 .707.707L5.207 8l3.293 3.293a.5.5 0 0 1-.707.707z" />
+                    </svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path fillRule="evenodd" d="M11.854 8.354a.5.5 0 0 1 0-.708L8.207 3.999a.5.5 0 1 1 .707-.707L13.293 7.64a.5.5 0 0 1 0 .707l-4.379 4.35a.5.5 0 1 1-.707-.707z" />
+                    </svg>
+                  )}
                 </span>
               </button>
             ) : null}
