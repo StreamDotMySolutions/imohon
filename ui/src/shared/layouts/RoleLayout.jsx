@@ -141,11 +141,11 @@ export default function RoleLayout({ title, basePath, extraLinks = [], showSideb
                 <span className="icon">
                   {sidebarCollapsed ? (
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path fillRule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708L7.793 3.999a.5.5 0 1 1 .707.707L5.207 8l3.293 3.293a.5.5 0 0 1-.707.707z" />
+                      <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5z" />
                     </svg>
                   ) : (
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path fillRule="evenodd" d="M11.854 8.354a.5.5 0 0 1 0-.708L8.207 3.999a.5.5 0 1 1 .707-.707L13.293 7.64a.5.5 0 0 1 0 .707l-4.379 4.35a.5.5 0 1 1-.707-.707z" />
+                      <path fillRule="evenodd" d="M2.5 2a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5zM4.146 4.146a.5.5 0 0 0-.708.708L5.293 7.707 3.438 9.562a.5.5 0 1 0 .708.708L6 8.414l1.854 1.856a.5.5 0 0 0 .708-.708L6.707 7.707l1.854-1.853a.5.5 0 0 0-.708-.708L6 6.293z" />
                     </svg>
                   )}
                 </span>
