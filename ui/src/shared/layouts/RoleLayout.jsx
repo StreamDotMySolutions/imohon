@@ -140,7 +140,7 @@ export default function RoleLayout({ title, basePath, extraLinks = [], showSideb
               >
                 <span className="icon">
                   <i
-                    className={`bi ${sidebarCollapsed ? 'bi-list' : 'bi-x-lg'}`}
+                    className={`bi ${sidebarCollapsed ? 'bi-x-lg' : 'bi-list'}`}
                     aria-hidden="true"
                     style={{ fontSize: '1rem', lineHeight: 1 }}
                   />
