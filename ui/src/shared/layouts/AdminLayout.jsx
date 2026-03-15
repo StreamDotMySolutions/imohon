@@ -6,6 +6,7 @@ export default function AdminLayout() {
     <RoleLayout
       title="Admin Console"
       basePath="/admin"
+      showSidebar
       extraLinks={[
         { label: 'Users', to: '/admin/users' },
         { label: 'Departments', to: '/admin/departments' },

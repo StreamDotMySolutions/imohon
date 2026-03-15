@@ -6,6 +6,7 @@ export default function UserLayout() {
     <RoleLayout
       title="User Console"
       basePath="/user"
+      showSidebar={false}
       extraLinks={[{ label: 'Requests', to: '/user/requests' }]}
     />
   );

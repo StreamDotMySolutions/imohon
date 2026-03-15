@@ -6,6 +6,7 @@ export default function SystemLayout() {
     <RoleLayout
       title="System Console"
       basePath="/system"
+      showSidebar
       extraLinks={[
         { label: 'Users', to: '/system/users' },
         { label: 'Departments', to: '/system/departments' },

@@ -6,6 +6,7 @@ export default function VendorLayout() {
     <RoleLayout
       title="Vendor Console"
       basePath="/vendor"
+      showSidebar={false}
       extraLinks={[{ label: 'Items', to: '/vendor/items' }]}
     />
   );
