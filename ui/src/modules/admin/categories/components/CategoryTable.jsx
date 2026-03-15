@@ -53,7 +53,7 @@ export default function CategoryTable({ categories, onDelete, onReorder }) {
                   <button
                     type="button"
                     className="btn btn-sm btn-outline-danger"
-                    onClick={() => onDelete(category.id)}
+                    onClick={() => onDelete(category)}
                   >
                     Delete
                   </button>

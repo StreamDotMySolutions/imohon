@@ -59,7 +59,7 @@ export default function AdminCategoriesIndexPage() {
       return;
     }
 
-    await deleteCategory(deleteTarget);
+    await deleteCategory(deleteTarget.id);
     setDeleteTarget(null);
   };
 
@@ -119,7 +119,11 @@ export default function AdminCategoriesIndexPage() {
       <ConfirmModal
         open={Boolean(deleteTarget)}
         title="Delete category"
-        message="Delete this category? This action cannot be undone."
+        message={
+          deleteTarget
+            ? `Deleting "${deleteTarget.name}" will remove ${((deleteTarget.descendants_count ?? 0) + 1).toString()} categories (including children). Continue?`
+            : 'Delete this category?'
+        }
         confirmLabel="Delete category"
         confirming={loading}
         onConfirm={handleDeleteConfirm}

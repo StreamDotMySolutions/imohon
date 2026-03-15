@@ -98,19 +98,16 @@ class CategoryController extends Controller
 
     public function destroy(Category $category): JsonResponse
     {
-        if ($category->children()->exists()) {
-            return response()->json([
-                'message' => 'Category cannot be deleted while child categories exist.',
-                'errors' => [
-                    'category' => ['Category cannot be deleted while child categories exist.'],
-                ],
-            ], 422);
-        }
+        $descendantCount = $category->descendants()->count();
+        $affected = $descendantCount + 1;
 
-        $category->delete();
+        DB::transaction(function () use ($category): void {
+            $category->descendantsAndSelf()->delete();
+        });
 
         return response()->json([
             'message' => 'Category deleted successfully.',
+            'affected_count' => $affected,
         ]);
     }
 
@@ -165,6 +162,7 @@ class CategoryController extends Controller
             'parent_name' => $category->parent?->name,
             'depth' => $category->depth,
             'has_children' => $category->children()->exists(),
+            'descendants_count' => $category->descendants()->count(),
             'created_at' => $category->created_at,
             'updated_at' => $category->updated_at,
         ];
