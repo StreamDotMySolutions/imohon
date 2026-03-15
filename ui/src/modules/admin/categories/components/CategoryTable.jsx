@@ -17,7 +17,6 @@ export default function CategoryTable({ categories, orderingCategoryId, onDelete
         <thead>
           <tr>
             <th>Name</th>
-            <th>Children</th>
             <th>Type</th>
             <th>Status</th>
             <th className="text-end">Actions</th>
@@ -32,14 +31,19 @@ export default function CategoryTable({ categories, orderingCategoryId, onDelete
                   <span className="text-muted me-1">{'\u00A0'.repeat(category.depth * 2)}- </span>
                 ) : null}
                 {category.type === 'folder' ? (
-                  <Link to={`/admin/categories?parent_id=${category.id}`} className="fw-semibold text-decoration-none">
+                  <Link
+                    to={`/admin/categories?parent_id=${category.id}`}
+                    className="fw-semibold text-decoration-none"
+                  >
                     {category.name}
+                    <span className="text-muted ms-1">
+                      ({category.children_count ?? 0})
+                    </span>
                   </Link>
                 ) : (
                   category.name
                 )}
               </td>
-              <td>{category.children_count ?? 0}</td>
               <td>
                 {category.type === 'folder' ? (
                   <Link
