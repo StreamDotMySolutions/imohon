@@ -36,7 +36,7 @@ body {
 
 .sidebar-toggle {
   position: absolute;
-  top: 1rem;
+  top: 0.25rem;
   right: -0.65rem;
   transform: translateX(50%);
   width: 2.25rem;
