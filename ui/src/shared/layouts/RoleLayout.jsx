@@ -126,15 +126,11 @@ export default function RoleLayout({ title, basePath, extraLinks = [], showSideb
 
       <div className="page-wrapper">
         <header className="content-navbar">
-          <div>
-            <div className="content-navbar-eyebrow">Imohon</div>
-            <div className="content-navbar-title">{title}</div>
-          </div>
-          <div className="content-navbar-actions">
+          <div className="d-flex align-items-center gap-3">
             {showSidebar ? (
               <button
                 type="button"
-                className="btn btn-sm btn-outline-secondary me-2"
+                className="btn btn-sm btn-outline-secondary"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebarMenu"
                 aria-controls="sidebarMenu"
@@ -149,6 +145,12 @@ export default function RoleLayout({ title, basePath, extraLinks = [], showSideb
                 </span>
               </button>
             ) : null}
+            <div>
+              <div className="content-navbar-eyebrow">Imohon</div>
+              <div className="content-navbar-title">{title}</div>
+            </div>
+          </div>
+          <div className="content-navbar-actions">
             <div className="dropdown">
               <button
                 type="button"
