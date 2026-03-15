@@ -18,10 +18,24 @@ class CategoryController extends Controller
     {
         $query = Category::query()->withDepth()->defaultOrder();
 
-        if ($request->has('parent_id') && $request->input('parent_id') === 'root') {
-            $query->whereNull('parent_id');
+        if ($request->boolean('all')) {
+            // Return the full tree for UI controls like parent selectors and breadcrumbs.
         } elseif ($request->filled('parent_id')) {
             $query->where('parent_id', $request->input('parent_id'));
+        } else {
+            $query->whereNull('parent_id');
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->string('search')->trim()->toString();
+
+            $query->where(function ($builder) use ($search): void {
+                $builder
+                    ->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('slug', 'like', '%' . $search . '%')
+                    ->orWhere('type', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            });
         }
 
         $categories = $query->paginate($request->integer('per_page', 15));
@@ -161,6 +175,7 @@ class CategoryController extends Controller
             'parent_name' => $category->parent?->name,
             'depth' => $category->depth,
             'has_children' => $category->children()->exists(),
+            'children_count' => $category->children()->count(),
             'descendants_count' => $category->descendants()->count(),
             'created_at' => $category->created_at?->format('d/m/Y h:i A'),
             'updated_at' => $category->updated_at?->format('d/m/Y h:i A'),

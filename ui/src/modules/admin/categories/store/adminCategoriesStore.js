@@ -16,19 +16,26 @@ export const useAdminCategoriesStore = create((set, get) => ({
     page: 1,
     per_page: 15,
     parent_id: '',
+    search: '',
   },
   selectedCategory: null,
   loading: false,
+  orderingCategoryId: null,
   saving: false,
   error: '',
   validationErrors: {},
-  async fetchCategories(params = {}) {
+  async fetchCategories(params = {}, options = {}) {
     const nextFilters = {
       ...get().filters,
       ...params,
     };
+    const { silent = false } = options;
 
-    set({ loading: true, error: '' });
+    if (!silent) {
+      set({ loading: true, error: '' });
+    } else {
+      set({ error: '' });
+    }
 
     try {
       const response = await adminCategoriesApi.index(nextFilters);
@@ -45,15 +52,15 @@ export const useAdminCategoriesStore = create((set, get) => ({
           from: body.from || 0,
           to: body.to || 0,
         },
-        loading: false,
+        loading: silent ? get().loading : false,
       });
     } catch (error) {
-      set({ loading: false, error: error.message });
+      set({ loading: silent ? get().loading : false, error: error.message });
     }
   },
   async fetchAllCategories() {
     try {
-      const response = await adminCategoriesApi.index({ page: 1, per_page: 300 });
+      const response = await adminCategoriesApi.index({ all: 1, page: 1, per_page: 300 });
 
       set({
         allCategories: response.data.data || [],
@@ -127,16 +134,42 @@ export const useAdminCategoriesStore = create((set, get) => ({
     }
   },
   async orderCategory(categoryId, direction) {
-    set({ loading: true, error: '' });
+    const currentCategories = get().categories;
+    const currentIndex = currentCategories.findIndex((category) => category.id === categoryId);
+
+    if (currentIndex === -1) {
+      return null;
+    }
+
+    const swapIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+
+    if (swapIndex < 0 || swapIndex >= currentCategories.length) {
+      return null;
+    }
+
+    const previousCategories = currentCategories;
+    const optimisticCategories = [...currentCategories];
+    const targetCategory = optimisticCategories[currentIndex];
+    optimisticCategories[currentIndex] = optimisticCategories[swapIndex];
+    optimisticCategories[swapIndex] = targetCategory;
+
+    set({
+      categories: optimisticCategories,
+      orderingCategoryId: categoryId,
+      error: '',
+    });
 
     try {
       const response = await adminCategoriesApi.order(categoryId, direction);
-      set({ loading: false });
-      await get().fetchCategories(get().filters);
-      await get().fetchAllCategories();
+      await get().fetchCategories(get().filters, { silent: true });
+      set({ orderingCategoryId: null });
       return response.data.data;
     } catch (error) {
-      set({ loading: false, error: error.message });
+      set({
+        categories: previousCategories,
+        orderingCategoryId: null,
+        error: error.message,
+      });
       throw error;
     }
   },

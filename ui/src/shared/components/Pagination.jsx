@@ -38,18 +38,12 @@ export default function Pagination({
   const currentPage = pagination.current_page || 1;
   const lastPage = pagination.last_page || 1;
   const perPage = pagination.per_page || perPageOptions[0];
-  const from = pagination.from || 0;
-  const to = pagination.to || 0;
   const pageItems = buildPageItems(currentPage, lastPage);
 
   return (
     <div className="app-pagination">
       <div className="app-pagination-summary">
-        <span>
-          Showing {from}-{to} of {pagination.total}
-        </span>
         <label className="app-pagination-per-page">
-          <span>Items per page</span>
           <select
             className="form-select form-select-sm"
             value={perPage}
