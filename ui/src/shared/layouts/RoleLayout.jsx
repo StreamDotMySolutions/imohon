@@ -130,7 +130,7 @@ export default function RoleLayout({ title, basePath, extraLinks = [], showSideb
             {showSidebar ? (
               <button
                 type="button"
-                className="btn btn-sm btn-outline-secondary"
+                className="btn btn-sm btn-link p-0 text-secondary"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebarMenu"
                 aria-controls="sidebarMenu"
