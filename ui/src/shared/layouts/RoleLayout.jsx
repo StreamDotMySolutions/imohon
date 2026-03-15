@@ -139,15 +139,11 @@ export default function RoleLayout({ title, basePath, extraLinks = [], showSideb
                 onClick={() => setSidebarCollapsed((prev) => !prev)}
               >
                 <span className="icon">
-                  {sidebarCollapsed ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5z" />
-                    </svg>
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path fillRule="evenodd" d="M2.5 2a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5zM4.146 4.146a.5.5 0 0 0-.708.708L5.293 7.707 3.438 9.562a.5.5 0 1 0 .708.708L6 8.414l1.854 1.856a.5.5 0 0 0 .708-.708L6.707 7.707l1.854-1.853a.5.5 0 0 0-.708-.708L6 6.293z" />
-                    </svg>
-                  )}
+                  <i
+                    className={`bi ${sidebarCollapsed ? 'bi-list' : 'bi-x-lg'}`}
+                    aria-hidden="true"
+                    style={{ fontSize: '1rem', lineHeight: 1 }}
+                  />
                 </span>
               </button>
             ) : null}
