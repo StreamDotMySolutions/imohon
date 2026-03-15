@@ -30,3 +30,27 @@ When you add a new resource today, copy the Category/Department pattern:
    - Run `npm run build` to confirm the UI compiles.
    - Run `php artisan migrate`/`db:seed` (with the correct database driver) so the backend schema and seed data exist.
    - Add a bullet or section describing the new resource inside this document so future engineers can reapply the same steps.
+
+### Reusable AI Prompt
+
+Use this when asking another AI to build a new CRUD module that should follow the Category standard closely.
+
+```text
+Use Category as the reference implementation and create the same full CRUD for <NewDomain>.
+
+Backend:
+- Follow the Category structure exactly: Model, FormRequests, Controller, Service, Resource, routes, and seeder pattern where relevant.
+- Use Eloquent-first style with thin controller and fat service.
+- Match the same response shape, pagination style, search/filter pattern, and role protection.
+- If the new domain does not need hierarchy, remove only the nested-set-specific behavior and keep the rest of the structure consistent.
+
+Frontend:
+- Follow the Category module structure exactly: api, store, pages, components, routes, and shared pagination/modal/header usage.
+- Reuse the same index UX pattern: header action row, search, breadcrumb/filter pattern if applicable, table actions, ordering UX if applicable, and delete confirmation.
+- Keep naming and file structure parallel to Category.
+- Only change fields and domain-specific rules.
+
+Before implementing, inspect the Category backend and frontend and list which parts will be reused as-is, which parts will be adapted, and which parts will be omitted for <NewDomain>.
+```
+
+If the new domain differs materially from Category, explicitly state those differences in the prompt instead of asking for a blind copy.
