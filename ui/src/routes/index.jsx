@@ -8,6 +8,10 @@ import AdminDepartmentsCreatePage from '../modules/admin/departments/pages/Creat
 import AdminDepartmentsEditPage from '../modules/admin/departments/pages/EditPage';
 import AdminDepartmentsIndexPage from '../modules/admin/departments/pages/IndexPage';
 import AdminDepartmentsShowPage from '../modules/admin/departments/pages/ShowPage';
+import AdminCategoriesCreatePage from '../modules/admin/categories/pages/CreatePage';
+import AdminCategoriesEditPage from '../modules/admin/categories/pages/EditPage';
+import AdminCategoriesIndexPage from '../modules/admin/categories/pages/IndexPage';
+import AdminCategoriesShowPage from '../modules/admin/categories/pages/ShowPage';
 import AdminLayout from '../shared/layouts/AdminLayout';
 import ManagerLayout from '../shared/layouts/ManagerLayout';
 import UserLayout from '../shared/layouts/UserLayout';
@@ -69,8 +73,12 @@ export const router = createBrowserRouter([
       },
       {
         path: 'categories',
-        index: true,
-        element: <ComingSoonPage title="Categories" />,
+        children: [
+          { index: true, element: <AdminCategoriesIndexPage /> },
+          { path: 'create', element: <AdminCategoriesCreatePage /> },
+          { path: ':categoryId', element: <AdminCategoriesShowPage /> },
+          { path: ':categoryId/edit', element: <AdminCategoriesEditPage /> },
+        ],
       },
       {
         path: 'vendors',
@@ -168,8 +176,12 @@ export const router = createBrowserRouter([
       },
       {
         path: 'categories',
-        index: true,
-        element: <ComingSoonPage title="Categories" />,
+        children: [
+          { index: true, element: <AdminCategoriesIndexPage /> },
+          { path: 'create', element: <AdminCategoriesCreatePage /> },
+          { path: ':categoryId', element: <AdminCategoriesShowPage /> },
+          { path: ':categoryId/edit', element: <AdminCategoriesEditPage /> },
+        ],
       },
       {
         path: 'vendors',
