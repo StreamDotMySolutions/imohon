@@ -20,7 +20,6 @@ export default function CategoryTable({ categories, orderingCategoryId, onDelete
             <th>Type</th>
             <th>Status</th>
             <th className="text-end">Actions</th>
-            <th className="text-end">Order</th>
           </tr>
         </thead>
         <tbody>
@@ -95,6 +94,24 @@ export default function CategoryTable({ categories, orderingCategoryId, onDelete
                 <StatusPill active={category.is_active} />
               </td>
               <td className="text-end">
+                <div className="btn-group btn-group-sm me-2">
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    disabled={orderingCategoryId === category.id || index === 0}
+                    onClick={() => onReorder(category.id, 'up')}
+                  >
+                    <i className="bi bi-arrow-up" aria-hidden="true" />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    disabled={orderingCategoryId === category.id || index === categories.length - 1}
+                    onClick={() => onReorder(category.id, 'down')}
+                  >
+                    <i className="bi bi-arrow-down" aria-hidden="true" />
+                  </button>
+                </div>
                 <div className="btn-group">
                   <Link to={`/admin/categories/${category.id}`} className="btn btn-sm btn-outline-secondary">
                     View
@@ -108,26 +125,6 @@ export default function CategoryTable({ categories, orderingCategoryId, onDelete
                     onClick={() => onDelete(category)}
                   >
                     Delete
-                  </button>
-                </div>
-              </td>
-              <td className="text-end">
-                <div className="btn-group btn-group-sm">
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary"
-                    disabled={orderingCategoryId === category.id || index === 0}
-                    onClick={() => onReorder(category.id, 'up')}
-                  >
-                    Up
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary"
-                    disabled={orderingCategoryId === category.id || index === categories.length - 1}
-                    onClick={() => onReorder(category.id, 'down')}
-                  >
-                    Down
                   </button>
                 </div>
               </td>
