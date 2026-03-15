@@ -43,7 +43,7 @@ class CategoryController extends Controller
             'is_active' => $data['is_active'] ?? true,
         ]);
 
-        if ($data['type'] === Category::TYPE_ITEM && ! empty($data['parent_id'])) {
+        if (! empty($data['parent_id'])) {
             $parent = Category::find($data['parent_id']);
             if ($parent) {
                 $category->appendToNode($parent);
@@ -79,12 +79,12 @@ class CategoryController extends Controller
 
         $parentId = $request->input('parent_id');
 
-        if ($data['type'] === Category::TYPE_ITEM && $parentId) {
+        if ($parentId) {
             $parent = Category::find($parentId);
             if ($parent) {
                 $category->appendToNode($parent);
             }
-        } elseif ($data['type'] === Category::TYPE_FOLDER) {
+        } else {
             $category->saveAsRoot();
         }
 
@@ -98,11 +98,10 @@ class CategoryController extends Controller
 
     public function destroy(Category $category): JsonResponse
     {
-        $nodesToDelete = Category::query()->descendantsAndSelf($category->id)->get();
-        $affected = $nodesToDelete->count();
+        $affected = $category->getDescendantCount() + 1;
 
-        DB::transaction(function () use ($nodesToDelete): void {
-            $nodesToDelete->each(fn (Category $node) => $node->delete());
+        DB::transaction(function () use ($category): void {
+            $category->delete();
         });
 
         return response()->json([
@@ -163,8 +162,8 @@ class CategoryController extends Controller
             'depth' => $category->depth,
             'has_children' => $category->children()->exists(),
             'descendants_count' => $category->descendants()->count(),
-            'created_at' => $category->created_at,
-            'updated_at' => $category->updated_at,
+            'created_at' => $category->created_at?->format('d/m/Y h:i A'),
+            'updated_at' => $category->updated_at?->format('d/m/Y h:i A'),
         ];
     }
 }

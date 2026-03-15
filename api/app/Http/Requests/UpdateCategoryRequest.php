@@ -45,11 +45,6 @@ class UpdateCategoryRequest extends FormRequest
                 function ($attribute, $value, $fail) use ($category, $descendantIds): void {
                     $type = $this->input('type');
 
-                    if ($type === Category::TYPE_FOLDER && $value) {
-                        $fail('Folders cannot have a parent.');
-                        return;
-                    }
-
                     if ($type === Category::TYPE_ITEM && ! $value) {
                         $fail('Items must have a parent.');
                         return;

@@ -30,11 +30,6 @@ class StoreCategoryRequest extends FormRequest
                 Rule::exists('categories', 'id'),
                 function ($attribute, $value, $fail): void {
                     $type = $this->input('type');
-                    if ($type === Category::TYPE_FOLDER && $value) {
-                        $fail('Folders cannot have a parent.');
-                        return;
-                    }
-
                     if ($type === Category::TYPE_ITEM && ! $value) {
                         $fail('Items must have a parent.');
                     }

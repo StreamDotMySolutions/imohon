@@ -45,6 +45,10 @@ export default function AdminCategoriesIndexPage() {
   }, [allCategories]);
 
   const parentFilterValue = filters?.parent_id ?? '';
+  const createHref =
+    parentFilterValue && parentFilterValue !== 'root'
+      ? `/admin/categories/create?parent_id=${parentFilterValue}`
+      : '/admin/categories/create';
 
   const handlePageChange = (page) => {
     fetchCategories({ page });
@@ -78,7 +82,7 @@ export default function AdminCategoriesIndexPage() {
         title="categories.index"
         description="Manage product categories and their hierarchy."
         actions={
-          <Link to="/admin/categories/create" className="btn btn-primary">
+          <Link to={createHref} className="btn btn-primary">
             Create category
           </Link>
         }
@@ -121,7 +125,9 @@ export default function AdminCategoriesIndexPage() {
         title="Delete category"
         message={
           deleteTarget
-            ? `Deleting "${deleteTarget.name}" will remove ${((deleteTarget.descendants_count ?? 0) + 1).toString()} categories (including children). Continue?`
+            ? deleteTarget.type === 'folder'
+              ? `Deleting "${deleteTarget.name}" will remove ${((deleteTarget.descendants_count ?? 0) + 1).toString()} categories (including children). Continue?`
+              : `Delete "${deleteTarget.name}"? This action cannot be undone.`
             : 'Delete this category?'
         }
         confirmLabel="Delete category"

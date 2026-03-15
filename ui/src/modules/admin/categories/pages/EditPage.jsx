@@ -7,6 +7,14 @@ import PageHeader from '../../../../shared/components/PageHeader';
 import CategoryForm from '../components/CategoryForm';
 import { useAdminCategoriesStore } from '../store/adminCategoriesStore';
 
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 const emptyForm = {
   type: '',
   name: '',
@@ -32,6 +40,7 @@ export default function AdminCategoriesEditPage() {
     allCategories,
   } = useAdminCategoriesStore();
   const [form, setForm] = useState(emptyForm);
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
 
   useEffect(() => {
     fetchCategory(categoryId);
@@ -63,6 +72,7 @@ export default function AdminCategoriesEditPage() {
       is_active: Boolean(selectedCategory.is_active),
       parent_id: selectedCategory.parent_id || '',
     });
+    setSlugManuallyEdited(false);
   }, [selectedCategory]);
 
   const normalizedErrors = useMemo(() => validationErrors || {}, [validationErrors]);
@@ -71,8 +81,19 @@ export default function AdminCategoriesEditPage() {
     const { name, value, type, checked } = event.target;
 
     clearMessages();
+
+    if (name === 'slug') {
+      setSlugManuallyEdited(true);
+    }
+
     setForm((current) => ({
       ...current,
+      slug:
+        name === 'name' && !slugManuallyEdited
+          ? slugify(value)
+          : name === 'slug'
+            ? value
+            : current.slug,
       [name]: type === 'checkbox' ? checked : value,
     }));
   };

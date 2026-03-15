@@ -82,6 +82,7 @@ export const useAdminCategoriesStore = create((set, get) => ({
     try {
       const response = await adminCategoriesApi.store(payload);
       set({ saving: false });
+      await get().fetchAllCategories();
       return response.data.data;
     } catch (error) {
       set({
@@ -101,6 +102,7 @@ export const useAdminCategoriesStore = create((set, get) => ({
         saving: false,
         selectedCategory: response.data.data,
       });
+      await get().fetchAllCategories();
       return response.data.data;
     } catch (error) {
       set({
@@ -118,6 +120,7 @@ export const useAdminCategoriesStore = create((set, get) => ({
       await adminCategoriesApi.destroy(categoryId);
       set({ loading: false });
       await get().fetchCategories(get().filters);
+      await get().fetchAllCategories();
     } catch (error) {
       set({ loading: false, error: error.message });
       throw error;
@@ -130,6 +133,7 @@ export const useAdminCategoriesStore = create((set, get) => ({
       const response = await adminCategoriesApi.order(categoryId, direction);
       set({ loading: false });
       await get().fetchCategories(get().filters);
+      await get().fetchAllCategories();
       return response.data.data;
     } catch (error) {
       set({ loading: false, error: error.message });

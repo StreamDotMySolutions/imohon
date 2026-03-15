@@ -1,10 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import BackLink from '../../../../shared/components/BackLink';
 import FeedbackAlert from '../../../../shared/components/FeedbackAlert';
 import PageHeader from '../../../../shared/components/PageHeader';
 import CategoryForm from '../components/CategoryForm';
 import { useAdminCategoriesStore } from '../store/adminCategoriesStore';
+
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
 
 const initialForm = {
   type: '',
@@ -17,6 +25,7 @@ const initialForm = {
 
 export default function AdminCategoriesCreatePage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const {
     createCategory,
     saving,
@@ -29,10 +38,30 @@ export default function AdminCategoriesCreatePage() {
   const [form, setForm] = useState(initialForm);
   const [categoryType, setCategoryType] = useState('');
   const [step, setStep] = useState(1);
+  const [defaultParentId, setDefaultParentId] = useState('');
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
 
   useEffect(() => {
     fetchAllCategories();
   }, [fetchAllCategories]);
+
+  useEffect(() => {
+    const parentId = searchParams.get('parent_id');
+
+    if (!parentId || !allCategories.length) {
+      return;
+    }
+
+    const parentCategory = allCategories.find(
+      (category) => String(category.id) === parentId && category.type === 'folder',
+    );
+
+    if (!parentCategory) {
+      return;
+    }
+
+    setDefaultParentId(parentId);
+  }, [allCategories, searchParams]);
 
   const normalizedErrors = useMemo(() => validationErrors || {}, [validationErrors]);
 
@@ -41,12 +70,18 @@ export default function AdminCategoriesCreatePage() {
     setForm((current) => ({
       ...current,
       type,
-      parent_id: type === 'folder' ? '' : current.parent_id,
+      parent_id: defaultParentId || current.parent_id,
     }));
     setStep(2);
   };
 
   const handleBackToType = () => {
+    setCategoryType('');
+    setForm((current) => ({
+      ...current,
+      type: '',
+      parent_id: defaultParentId || '',
+    }));
     setStep(1);
   };
 
@@ -54,8 +89,19 @@ export default function AdminCategoriesCreatePage() {
     const { name, value, type, checked } = event.target;
 
     clearMessages();
+
+    if (name === 'slug') {
+      setSlugManuallyEdited(true);
+    }
+
     setForm((current) => ({
       ...current,
+      slug:
+        name === 'name' && !slugManuallyEdited
+          ? slugify(value)
+          : name === 'slug'
+            ? value
+            : current.slug,
       [name]: type === 'checkbox' ? checked : value,
     }));
   };
@@ -141,7 +187,7 @@ export default function AdminCategoriesCreatePage() {
             submitLabel="Create category"
             validationErrors={normalizedErrors}
             parentOptions={parentOptions}
-            showParentSelect={categoryType === 'item'}
+            showParentSelect
           />
         </>
       )}
