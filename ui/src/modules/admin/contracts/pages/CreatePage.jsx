@@ -55,6 +55,11 @@ export default function AdminContractsCreatePage() {
     }));
   };
 
+  const handleItemsChange = (items) => {
+    clearMessages();
+    setForm((current) => ({ ...current, items }));
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -83,6 +88,7 @@ export default function AdminContractsCreatePage() {
       <ContractForm
         form={form}
         onChange={handleChange}
+        onItemsChange={handleItemsChange}
         onSubmit={handleSubmit}
         saving={saving}
         validationErrors={validationErrors}

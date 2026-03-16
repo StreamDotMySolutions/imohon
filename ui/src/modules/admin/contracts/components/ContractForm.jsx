@@ -1,8 +1,10 @@
 import React from 'react';
+import ContractItemsEditor from './ContractItemsEditor';
 
 export default function ContractForm({
   form,
   onChange,
+  onItemsChange,
   onSubmit,
   saving,
   validationErrors = {},
@@ -51,59 +53,7 @@ export default function ContractForm({
         <div className="invalid-feedback">{firstError('vendor_id')}</div>
       </div>
 
-      <div className="col-md-6">
-        <label htmlFor="vendor_name" className="form-label">
-          Vendor name
-        </label>
-        <input
-          id="vendor_name"
-          name="vendor_name"
-          value={form.vendor_name}
-          onChange={onChange}
-          className={inputClassName('vendor_name')}
-          placeholder="Name used for this contract"
-        />
-        <div className="invalid-feedback">{firstError('vendor_name')}</div>
-      </div>
-
-      <div className="col-md-6">
-        <label htmlFor="category_id" className="form-label">
-          Category
-        </label>
-        <select
-          id="category_id"
-          name="category_id"
-          value={form.category_id || ''}
-          onChange={onChange}
-          className={selectClassName('category_id')}
-        >
-          <option value="">Select a category</option>
-          {categoryOptions.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-        <div className="invalid-feedback">{firstError('category_id')}</div>
-      </div>
-
-      <div className="col-md-6">
-        <label htmlFor="total" className="form-label">
-          Total units
-        </label>
-        <input
-          id="total"
-          name="total"
-          type="number"
-          min="0"
-          value={form.total}
-          onChange={onChange}
-          className={inputClassName('total')}
-        />
-        <div className="invalid-feedback">{firstError('total')}</div>
-      </div>
-
-      <div className="col-md-6">
+      <div className="col-md-4">
         <label htmlFor="date_start" className="form-label">
           Start date
         </label>
@@ -118,7 +68,7 @@ export default function ContractForm({
         <div className="invalid-feedback">{firstError('date_start')}</div>
       </div>
 
-      <div className="col-md-6">
+      <div className="col-md-4">
         <label htmlFor="date_end" className="form-label">
           End date
         </label>
@@ -133,7 +83,7 @@ export default function ContractForm({
         <div className="invalid-feedback">{firstError('date_end')}</div>
       </div>
 
-      <div className="col-md-6">
+      <div className="col-md-4">
         <label htmlFor="date_delivery" className="form-label">
           Delivery date
         </label>
@@ -171,6 +121,15 @@ export default function ContractForm({
             Active
           </label>
         </div>
+      </div>
+
+      <div className="col-12">
+        <ContractItemsEditor
+          items={form.items}
+          onItemsChange={onItemsChange}
+          categories={categoryOptions}
+          error={firstError('items')}
+        />
       </div>
 
       <div className="col-12">

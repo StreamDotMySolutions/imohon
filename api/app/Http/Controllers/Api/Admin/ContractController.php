@@ -67,4 +67,14 @@ class ContractController extends Controller
             'message' => 'Contract deleted successfully.',
         ]);
     }
+
+    public function toggleStatus(Request $request, Contract $contract): JsonResponse
+    {
+        $contract = $this->contractService->toggleStatus($contract, (bool) $request->input('active'));
+
+        return response()->json([
+            'message' => 'Contract status updated.',
+            'data' => ContractResource::make($contract),
+        ]);
+    }
 }

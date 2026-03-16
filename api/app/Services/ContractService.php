@@ -94,6 +94,12 @@ class ContractService
         $contract->delete();
     }
 
+    public function toggleStatus(Contract $contract, bool $active): Contract
+    {
+        $contract->update(['active' => $active]);
+        return $this->refreshContract($contract);
+    }
+
     public function refreshContract(Contract $contract): Contract
     {
         return Contract::query()

@@ -21,11 +21,12 @@ Route::middleware(['auth:sanctum', 'role:Admin|System'])
     ->group(function (): void {
         Route::apiResource('users', UserController::class);
         Route::apiResource('departments', DepartmentController::class);
-        Route::get('vendors', [VendorController::class, 'index']);
+        Route::apiResource('vendors', VendorController::class);
         Route::patch('categories/{category}/order', [CategoryController::class, 'order']);
         Route::patch('categories/{category}/status', [CategoryController::class, 'status']);
         Route::apiResource('categories', CategoryController::class);
         Route::get('inventories/summary', [InventoryController::class, 'summary']);
         Route::apiResource('inventories', InventoryController::class)->only(['index']);
+        Route::patch('contracts/{contract}/status', [ContractController::class, 'toggleStatus']);
         Route::apiResource('contracts', ContractController::class);
     });

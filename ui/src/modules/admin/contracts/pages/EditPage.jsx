@@ -84,6 +84,11 @@ export default function AdminContractsEditPage() {
     }));
   };
 
+  const handleItemsChange = (items) => {
+    clearMessages();
+    setForm((current) => ({ ...current, items }));
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -115,6 +120,7 @@ export default function AdminContractsEditPage() {
       <ContractForm
         form={form}
         onChange={handleChange}
+        onItemsChange={handleItemsChange}
         onSubmit={handleSubmit}
         saving={saving}
         validationErrors={normalizedErrors}

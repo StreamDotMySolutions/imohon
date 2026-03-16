@@ -132,7 +132,16 @@ export const useAdminContractsStore = create((set, get) => ({
     }
   },
   async toggleActive(contractId, active) {
-    return get().updateContract(contractId, { active });
+    set({ saving: true, error: '' });
+    try {
+      const response = await adminContractsApi.toggleStatus(contractId, active);
+      set({ saving: false, selectedContract: response.data.data });
+      await get().fetchContracts(get().filters, { silent: true });
+      return response.data.data;
+    } catch (error) {
+      set({ saving: false, error: error.message });
+      throw error;
+    }
   },
   clearMessages() {
     set({ error: '', validationErrors: {} });

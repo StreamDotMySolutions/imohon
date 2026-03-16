@@ -16,4 +16,7 @@ export const adminContractsApi = {
   destroy(contractId) {
     return http.delete(`/admin/contracts/${contractId}`);
   },
+  toggleStatus(contractId, active) {
+    return http.patch(`/admin/contracts/${contractId}/status`, { active });
+  },
 };
