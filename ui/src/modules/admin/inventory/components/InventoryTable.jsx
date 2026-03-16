@@ -34,7 +34,7 @@ export default function InventoryTable({ inventories }) {
                 <small className="text-muted">{item.contract_number || '-'}</small>
               </td>
               <td>
-                <span className="badge bg-info text-dark">{item.total}</span>
+                <span className="badge bg-info text-white">{item.total}</span>
               </td>
               <td>
                 <small className="text-muted">{item.reference_number || '-'}</small>
