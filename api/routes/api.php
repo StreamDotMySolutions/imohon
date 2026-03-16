@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Admin\CategoryController;
 use App\Http\Controllers\Api\Admin\ContractController;
 use App\Http\Controllers\Api\Admin\DepartmentController;
 use App\Http\Controllers\Api\Admin\InventoryController;
+use App\Http\Controllers\Api\Admin\ItemController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\VendorController;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,8 @@ Route::middleware(['auth:sanctum', 'role:Admin|System'])
         Route::apiResource('categories', CategoryController::class);
         Route::get('inventories/summary', [InventoryController::class, 'summary']);
         Route::apiResource('inventories', InventoryController::class)->only(['index']);
+        Route::get('items', [ItemController::class, 'index']);
+        Route::patch('items/{item}/status', [ItemController::class, 'updateStatus']);
         Route::patch('contracts/{contract}/status', [ContractController::class, 'toggleStatus']);
         Route::apiResource('contracts', ContractController::class);
     });

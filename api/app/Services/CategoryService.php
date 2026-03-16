@@ -26,6 +26,10 @@ class CategoryService
             }
         }
 
+        if (! empty($filters['type'])) {
+            $query->where('type', $filters['type']);
+        }
+
         if (! empty($filters['search'])) {
             $search = trim((string) $filters['search']);
 

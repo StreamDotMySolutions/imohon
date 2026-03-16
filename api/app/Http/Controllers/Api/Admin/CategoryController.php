@@ -25,6 +25,7 @@ class CategoryController extends Controller
         $categories = $this->categoryService->paginate([
             'all' => $request->boolean('all'),
             'parent_id' => $request->input('parent_id'),
+            'type' => $request->input('type'),
             'search' => $request->input('search'),
             'per_page' => $request->integer('per_page', 15),
         ]);
