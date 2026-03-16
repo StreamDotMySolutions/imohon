@@ -38,6 +38,14 @@ function SidebarIcon({ label }) {
           <path d="M6.5 6.5v-6h3v6h6v9h-15v-9zm-5.5 1v7h14v-7h-4v-6h-1v6zm4-2h1v1h-1zm0 3h1v1h-1zm0 3h1v1h-1zm5-6h1v1h-1zm0 3h1v1h-1zm0 3h1v1h-1z" />
         </svg>
       );
+    case 'Warehouse':
+      return (
+        <svg {...iconProps}>
+          <path d="M2.5 1a1 1 0 0 0-1 .56l-1.481 4.2c-.015.047-.024.094-.024.142H1v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V5.898a.5.5 0 0 0-.03-.142l-1.481-4.2a1 1 0 0 0-.93-.556zm-.761 1.52L3.5 2h9l1.761 4.52H1.739z" />
+          <path d="M2 6a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
+          <path d="M2 10a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
+        </svg>
+      );
     case 'Items':
       return (
         <svg {...iconProps}>

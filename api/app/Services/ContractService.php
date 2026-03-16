@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Contract;
+use App\Models\Inventory;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 
@@ -57,6 +58,8 @@ class ContractService
             ]);
         }
 
+        $this->syncInventory($contract);
+
         return $this->refreshContract($contract);
     }
 
@@ -81,6 +84,8 @@ class ContractService
             ]);
         }
 
+        $this->syncInventory($contract);
+
         return $this->refreshContract($contract);
     }
 
@@ -94,5 +99,29 @@ class ContractService
         return Contract::query()
             ->with(['vendor', 'items.category'])
             ->findOrFail($contract->id);
+    }
+
+    private function syncInventory(Contract $contract): void
+    {
+        $contract = $contract->fresh('items');
+
+        $categoryIds = $contract->items->pluck('category_id')->toArray();
+
+        // Delete inventory rows for categories no longer in the contract
+        $contract->inventories()->whereNotIn('category_id', $categoryIds)->delete();
+
+        // Create or update inventory records
+        foreach ($contract->items as $item) {
+            Inventory::updateOrCreate(
+                [
+                    'contract_id' => $contract->id,
+                    'category_id' => $item->category_id,
+                ],
+                [
+                    'total' => $item->quantity,
+                    'reference_number' => $contract->contract_number,
+                ],
+            );
+        }
     }
 }

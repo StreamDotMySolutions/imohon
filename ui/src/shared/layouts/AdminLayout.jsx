@@ -8,13 +8,13 @@ export default function AdminLayout() {
       basePath="/admin"
       showSidebar
       extraLinks={[
-        { label: 'Users', to: '/admin/users' },
-        { label: 'Departments', to: '/admin/departments' },
-        { label: 'Items', to: '/admin/items' },
-        { label: 'Categories', to: '/admin/categories' },
-        { label: 'Contracts', to: '/admin/contracts' },
-        { label: 'Vendors', to: '/admin/vendors' },
-        { label: 'Distributions', to: '/admin/distributions' },
+        { label: 'Users', to: '/admin/users', icon: 'bi-people' },
+        { label: 'Departments', to: '/admin/departments', icon: 'bi-diagram-3' },
+        { label: 'Warehouse', to: '/admin/items', icon: 'bi-boxes' },
+        { label: 'Categories', to: '/admin/categories', icon: 'bi-tags' },
+        { label: 'Contracts', to: '/admin/contracts', icon: 'bi-file-earmark-text' },
+        { label: 'Vendors', to: '/admin/vendors', icon: 'bi-shop' },
+        { label: 'Distributions', to: '/admin/distributions', icon: 'bi-truck' },
       ]}
     />
   );

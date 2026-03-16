@@ -16,6 +16,7 @@ import AdminContractsCreatePage from '../modules/admin/contracts/pages/CreatePag
 import AdminContractsEditPage from '../modules/admin/contracts/pages/EditPage';
 import AdminContractsIndexPage from '../modules/admin/contracts/pages/IndexPage';
 import AdminContractsShowPage from '../modules/admin/contracts/pages/ShowPage';
+import AdminInventoryIndexPage from '../modules/admin/inventory/pages/IndexPage';
 import AdminLayout from '../shared/layouts/AdminLayout';
 import ManagerLayout from '../shared/layouts/ManagerLayout';
 import UserLayout from '../shared/layouts/UserLayout';
@@ -72,8 +73,9 @@ export const router = createBrowserRouter([
       },
       {
         path: 'items',
-        index: true,
-        element: <ComingSoonPage title="Items" />,
+        children: [
+          { index: true, element: <AdminInventoryIndexPage /> },
+        ],
       },
       {
         path: 'categories',
@@ -193,8 +195,9 @@ export const router = createBrowserRouter([
       },
       {
         path: 'items',
-        index: true,
-        element: <ComingSoonPage title="Items" />,
+        children: [
+          { index: true, element: <AdminInventoryIndexPage /> },
+        ],
       },
       {
         path: 'categories',
